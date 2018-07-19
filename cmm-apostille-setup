@@ -32,9 +32,7 @@ sleep 3
 # Check for systemd
 systemctl --version >/dev/null 2>&1 || { echo "systemd is required. Are you using Ubuntu 16.04?"  >&2; exit 1; }
 
-if [ ${uname -m} == 'x86_64' ]; then
-
-else
+if [ '${uname -m}' -ne 'x86_64' ]; then
 	echo "systemd is required. Are you using Ubuntu 16.04 64bit?"  >&2; exit 1;
 fi
 
@@ -179,7 +177,7 @@ sudo systemctl start commerciumd
 echo && echo "Masternode setup complete!"
 touch ~/.bash_aliases
 echo "alias commercium-cli='commercium-cli -conf=/home/apostille/.commerciumcore/commercium.conf -datadir=/home/apostille/.commerciumcore'" | tee -a ~/.bash_aliases
-alias commercium-cli='commercium-cli -conf=/home/apostille/.commerciumcore/commercium.conf -datadir=/home/apostille/.commerciumcore
+alias commercium-cli='commercium-cli -conf=/home/apostille/.commerciumcore/commercium.conf -datadir=/home/apostille/.commerciumcore'
 
 echo && echo
 echo "********************************************************************************"
@@ -208,7 +206,10 @@ echo && echo
 echo "********************************************************************************"
 echo "* Congratulation! Your setup is completed.                                     *"
 echo "*                                                                              *"
-echo "* now you can run commercium-cli                                               *"
+echo "* Now you can run commercium-cli                                               *"
 echo "* Your datadir is /home/apostille/.commerciumcore                              *"
+echo "* Useful command: sudo systemctl status commerciumd                            *"
+echo "*                 sudo systemctl restart commerciumd                           *"
+echo "*                 sudo systemctl start commerciumd                             *"
 echo "********************************************************************************"
 
