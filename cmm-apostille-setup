@@ -8,7 +8,7 @@ clear
 cd ~ 
 echo "12345678901234567890123456789012345678901234567890123456789012345678901234567890"
 echo "********************************************************************************"
-echo "*      Ubuntu 16.04 is the recommended opearting system for this install.      *"
+echo "*      Ubuntu 16.04 x64 is the recommended opearting system for this install.  *"
 echo "*                                                                              *"
 echo "*      This script will install and configure your Commercium Apostille.       *"
 echo "********************************************************************************"
@@ -31,6 +31,12 @@ sleep 3
 
 # Check for systemd
 systemctl --version >/dev/null 2>&1 || { echo "systemd is required. Are you using Ubuntu 16.04?"  >&2; exit 1; }
+
+if [ ${uname -m} == 'x86_64' ]; then
+
+else
+	echo "systemd is required. Are you using Ubuntu 16.04 64bit?"  >&2; exit 1;
+fi
 
 # Gather input from user
 read -e -p "Masternode Private Key (e.g. 5edfjLCUzGczZi3JQw8GHp434R9kNY33eFyMGeKRymkB56G4324h) : " key
@@ -168,6 +174,13 @@ WantedBy=multi-user.target
 sudo systemctl enable commerciumd
 sudo systemctl start commerciumd
 
+
+# Add alias to run commercium-cli
+echo && echo "Masternode setup complete!"
+touch ~/.bash_aliases
+echo "alias commercium-cli='commercium-cli -conf=/home/apostille/.commerciumcore/commercium.conf -datadir=/home/apostille/.commerciumcore'" | tee -a ~/.bash_aliases
+alias commercium-cli='commercium-cli -conf=/home/apostille/.commerciumcore/commercium.conf -datadir=/home/apostille/.commerciumcore
+
 echo && echo
 echo "********************************************************************************"
 echo "* COLD WALLET PART 2 - DO THIS ON YOUR FULL NODE DESKTOP WALLET                *"
@@ -194,4 +207,8 @@ echo "**************************************************************************
 echo && echo
 echo "********************************************************************************"
 echo "* Congratulation! Your setup is completed.                                     *"
+echo "*                                                                              *"
+echo "* now you can run commercium-cli                                               *"
+echo "* Your datadir is /home/apostille/.commerciumcore                              *"
 echo "********************************************************************************"
+
